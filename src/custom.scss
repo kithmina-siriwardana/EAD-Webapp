@@ -1,0 +1,130 @@
+// Overwrite theme variables BEFORE importing Bootstrap
+$primary: #14367a;
+$secondary: #67ccd1;
+$success: #125015;
+// $info: #b8c0ff;
+$info: #14a2b8;
+$warning: orange;
+$danger: #b32d00;
+$light: white;
+$dark: black;
+
+// Import Bootstrap after overriding variables
+@import "~bootstrap/scss/bootstrap.scss";
+
+.w-20px {
+  width: 320px !important;
+}
+
+.pl-sidebar {
+  padding-left: 320px !important;
+}
+
+.ml-sidebar {
+  margin-left: 12px !important;
+}
+
+.pl-collaps-sidebar {
+  padding-left: 125px !important;
+}
+
+.ml-collaps-sidebar {
+  margin-left: 12px !important;
+}
+
+.min-h-100vh {
+  min-height: 100vh;
+}
+
+.min-w-100 {
+  min-width: 100%;
+}
+
+.product-viewe-title {
+  font-size: 38px;
+  font-weight: bold;
+  color: #0e2249;
+}
+
+.product-viewe-title-status-active {
+  font-size: 15px;
+  margin-left: 20px;
+  border: 1px solid #1ccc16;
+  border-radius: 10px;
+  color: #1ccc16;
+
+  padding: 2px 5px;
+}
+
+.product-viewe-title-status-inactive {
+  font-size: 15px;
+  margin-left: 20px;
+  border: 1px solid #a80606;
+  border-radius: 10px;
+  color: #a80606;
+
+  padding: 2px 5px;
+}
+
+.collaps-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  padding: 0px;
+  background-color: #0e2249;
+  border: none;
+  color: white;
+}
+
+.expand-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  padding: 0px;
+  margin-top: 20px;
+  margin-left: 20px;
+  background-color: #0e2249;
+  border: none;
+  color: white;
+}
+
+.product-view-price {
+  font-weight: bold;
+  color: #e9415e;
+  margin-top: 20px;
+}
+.product-view-amount {
+  font-size: 35px;
+  font-weight: bold;
+  color: #e9415e;
+  margin-left: 5px;
+}
+
+.custom-img {
+  height: 22vw;
+  max-height: 300px;
+  border-radius: 35px;
+  border: 3px solid #e0e0e0;
+}
+
+.custom-img-preview {
+  height: 5vw;
+  border-radius: 10px;
+  border: 3px solid #e0e0e0;
+}
+
+.cmt-10 {
+  margin-top: 10px;
+}
+
+.cmt-25 {
+  margin-top: 25px;
+}
+
+.custom-padding-prod-img {
+  padding: 0px 60px;
+}
