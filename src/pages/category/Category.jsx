@@ -15,7 +15,7 @@ const Category = () => {
   const [showAddConfirmModal, setShowAddConfirmModal] = useState(false);
   const [showEditConfirmModal, setShowEditConfirmModal] = useState(false);
   const [showViewCategoryModal, setShowViewCategoryModal] = useState(false);
-  const [categorys, setCategorys] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [status, setStatus] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [editModal, setEditModal] = useState(false);
@@ -26,21 +26,21 @@ const Category = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   // Function to handle category fetch
-  const fetchCategorys = async () => {
+  const fetchCategories = async () => {
     try {
       const response = await fetch(CATEGORY_URLS.CATEGORY_GET_ALL_URL);
       const data = await response.json();
-      console.log("Categorys: ", data);
-      setCategorys(data);
+      console.log("Categories: ", data);
+      setCategories(data);
     } catch (error) {
-      console.error("Error fetching categorys", error);
+      console.error("Error fetching categories", error);
     }
   };
 
   // Toggle function to change the status
   const handleToggleStatus = async (id) => {
     console.log("Toggling status for category with ID:", id);
-    const updatedCategories = categorys.map((category) =>
+    const updatedCategories = categories.map((category) =>
       category.id === id ? { ...category, status: !category.status } : category
     );
 
@@ -54,12 +54,12 @@ const Category = () => {
       .catch((error) => {
         alert("Something went wrong! Please try again later.");
       });
-    setCategorys(updatedCategories);
+    setCategories(updatedCategories);
   };
 
-  // Fetch categorys on component mount
+  // Fetch categories on component mount
   useEffect(() => {
-    fetchCategorys();
+    fetchCategories();
     setIsLoading(false);
   }, [isCategoryUpdated]);
 
@@ -105,8 +105,8 @@ const Category = () => {
     setSelectedStatus(e.target.value);
   };
 
-  // Function to filter categorys based on search query and category
-  const filteredCategories = categorys.filter((category) => {
+  // Function to filter categories based on search query and category
+  const filteredCategories = categories.filter((category) => {
     const matchesSearch =
       category.name.toLowerCase().includes(searchQuery) ||
       category.categoryId.toLowerCase().includes(searchQuery);
@@ -121,7 +121,7 @@ const Category = () => {
   // Function to handle edit button click
   const handleEdit = (id) => {
     setEditModal(true);
-    const categoryToEdit = categorys.find((category) => category.id === id);
+    const categoryToEdit = categories.find((category) => category.id === id);
     setNewCategoryData(categoryToEdit);
     setEditCategoryId(id);
     setShowAddCategoryModal(true);
@@ -173,7 +173,7 @@ const Category = () => {
 
   //handle category view
   const handleCategoryView = (id) => {
-    const categoryToView = categorys.find((category) => category.id === id);
+    const categoryToView = categories.find((category) => category.id === id);
     setNewCategoryData(categoryToView);
     setShowViewCategoryModal(true);
   };
@@ -182,13 +182,13 @@ const Category = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6; // You can set this to any number of items per page
 
-  // Calculate total pages based on filtered categorys
+  // Calculate total pages based on filtered categories
   const totalPages = Math.ceil(filteredCategories.length / itemsPerPage);
 
-  // Calculate the categorys for the current page
+  // Calculate the categories for the current page
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentCategorys = filteredCategories.slice(
+  const currentCategories = filteredCategories.slice(
     indexOfFirstItem,
     indexOfLastItem
   );
@@ -210,7 +210,7 @@ const Category = () => {
     <div className="px-4 my-4">
       {/* Header text */}
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1>List of All Categorys</h1>
+        <h1>List of All Categories</h1>
         <Button variant="primary" onClick={handleAdd}>
           Add New Category
         </Button>
@@ -225,7 +225,7 @@ const Category = () => {
           padding: "20px",
         }}
       >
-        <h4>Search Categorys</h4>
+        <h4>Search Categories</h4>
         <div className="d-flex justify-content-between align-items-center">
           <input
             type="text"
@@ -249,7 +249,7 @@ const Category = () => {
 
       {/* Table */}
       <div>
-        {isLoading && !categorys ? (
+        {isLoading && !categories ? (
           <div
             className="spinner-border"
             style={{ width: "3rem", height: "3rem" }}
