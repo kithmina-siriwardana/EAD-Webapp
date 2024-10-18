@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button, Spinner } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import ProductViewContent from "../product/productViewContent";
 import { ORDER_URLS, ORDER_ITEMS } from "../../utils/config";
@@ -11,12 +11,15 @@ const ViewOrderModal = ({
   order,
   setIsOrderUpdated,
   isOrderUpdated,
+  fetchOrders,
+  setSelectedOrder,
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [showProductView, setShowProductView] = useState(false);
   const [orderItems, setOrderItems] = useState([]);
   const [orderStatus, setOrderStatus] = useState("");
+  const [updatingID, setUpdatingID] = useState("");
 
   const loggedInUser = JSON.parse(localStorage.getItem("auth"));
 
@@ -32,22 +35,26 @@ const ViewOrderModal = ({
     setShowModal(!showModal);
   };
 
-  const updateOrderStatus = async () => {
+  const updateOrderStatus = async (e) => {
+    e.preventDefault();
     try {
       await axios
         .patch(`${ORDER_URLS.ORDER_STATUS_UPDATE_URL}/${order.orderId}`, {
           newStatus: orderStatus,
         })
-        .then((response) => {
+        .then(async (response) => {
           console.log("response", response);
+          await fetchOrders();
           alert("Order status updated successfully");
           setIsOrderUpdated(!isOrderUpdated);
           setShowModal(false);
+          setOrderItems([]);
           onClose();
         });
     } catch (error) {
       alert("Failed to update order status. Please try again.");
       setShowModal(false);
+      setOrderItems([]);
       onClose();
     }
   };
@@ -63,18 +70,27 @@ const ViewOrderModal = ({
   };
 
   //delete order
-  const deleteOrder = async () => {
+  const deleteOrder = async (e) => {
+    e.preventDefault();
     try {
       await axios
-        .patch(`${ORDER_URLS.ORDER_DELETE_URL}/${order.orderId}`, {
+        .patch(`${ORDER_URLS.ORDER_STATUS_UPDATE_URL}/${order.orderId}`, {
           newStatus: "Deleted",
-          note: "",
         })
-        .then((response) => {
-          setShowDeleteConfirmation(false);
+        .then(async (response) => {
+          console.log("response", response);
+          await fetchOrders();
+          alert("Order status updated successfully");
+          setIsOrderUpdated(!isOrderUpdated);
+          setShowModal(false);
+          setOrderItems([]);
+          onClose();
         });
     } catch (error) {
-      alert("Failed to delete order. Please try again.");
+      alert("Failed to update order status. Please try again.");
+      setShowModal(false);
+      setOrderItems([]);
+      onClose();
     }
   };
 
@@ -86,12 +102,20 @@ const ViewOrderModal = ({
       const orderData = {
         newStatus: status,
       };
+      setUpdatingID(id);
       await axios
         .patch(`${ORDER_ITEMS.ORDER_UPDATE_ITEMS_URL}/${id}`, orderData, {})
-        .then((response) => {
+        .then(async (response) => {
+          await fetchOrders();
+          setUpdatingID("");
+          onClose();
+          setSelectedOrder(null);
+          setOrderItems([]);
+
           alert("order item status updated successfully");
         });
     } catch (error) {
+      setUpdatingID("");
       alert("Failed to delete order. Please try again.");
     }
   };
@@ -105,6 +129,7 @@ const ViewOrderModal = ({
       onHide={() => {
         setShowModal(false);
         setShowDeleteConfirmation(false);
+        setOrderItems([]);
         onClose();
       }}
       size={showModal || showDeleteConfirmation ? "md" : "xl"}
@@ -212,6 +237,11 @@ const ViewOrderModal = ({
                           setOrderStatus(e.target.value);
                           console.log("order status", e.target.value);
                         }}
+                        disabled={
+                          order.status === "Delivered" ||
+                          order.status === "Cancelled" ||
+                          order.note !== ""
+                        }
                       >
                         <option value="Purchased">Purchased</option>
                         <option value="Processing">Processing</option>
@@ -226,7 +256,15 @@ const ViewOrderModal = ({
                         <span style={{ color: "red" }}>{order.note}</span>
                       </p>
                     )}
-                    <Button variant="danger" onClick={handleDeleteOrder}>
+                    <Button
+                      variant="danger"
+                      onClick={handleDeleteOrder}
+                      disabled={
+                        order.status === "Delivered" ||
+                        order.status === "Cancelled" ||
+                        order.note !== ""
+                      }
+                    >
                       Delete this Order
                     </Button>
                     <p style={{ marginTop: "20px" }}>
@@ -269,23 +307,34 @@ const ViewOrderModal = ({
                                 {item.quantity}
                               </td>
                               <td>
-                                <select
-                                  style={{
-                                    padding: "5px 10px",
-                                    borderRadius: "20px",
-                                  }}
-                                  defaultValue={item.status}
-                                  onChange={(e) => {
-                                    updateOrderItems(item.id, e.target.value);
-                                  }}
-                                >
-                                  {" "}
-                                  <option value="Processing">Processing</option>
-                                  <option value="Purchased">Purchased</option>
-                                  <option value="Dispatched">Dispatched</option>
-                                  <option value="Delivered">Delivered</option>
-                                  <option value="Cancelled">Cancelled</option>
-                                </select>
+                                {updatingID == item.id ? (
+                                  <Spinner />
+                                ) : (
+                                  <select
+                                    style={{
+                                      padding: "5px 10px",
+                                      borderRadius: "20px",
+                                    }}
+                                    defaultValue={item.status}
+                                    onChange={(e) => {
+                                      updateOrderItems(item.id, e.target.value);
+                                    }}
+                                    disabled={
+                                      item.status === "Delivered" ||
+                                      item.status === "Cancelled"
+                                    }
+                                  >
+                                    {" "}
+                                    <option value="Processing">
+                                      Processing
+                                    </option>
+                                    <option value="Purchased">Purchased</option>
+                                    <option value="Dispatched">
+                                      Dispatched
+                                    </option>
+                                    <option value="Delivered">Delivered</option>
+                                  </select>
+                                )}
                               </td>
                             </tr>
                           ))
@@ -306,8 +355,16 @@ const ViewOrderModal = ({
       <Modal.Footer style={{ backgroundColor: "#edf2fd" }}>
         {!showModal && !showDeleteConfirmation && (
           <span>
-            <Button variant="primary" onClick={handleConfirmationModel}>
-              Save
+            <Button
+              variant="primary"
+              onClick={handleConfirmationModel}
+              disabled={
+                order.status === "Delivered" ||
+                order.status === "Cancelled" ||
+                order.note !== ""
+              }
+            >
+              Confirm Status Change
             </Button>
           </span>
         )}
