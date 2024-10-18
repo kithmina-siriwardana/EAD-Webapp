@@ -4,7 +4,7 @@ import Table from "react-bootstrap/Table";
 import ConfirmModal from "../../components/confirm-modal/ConfirmModal";
 import AddCsrModal from "../../components/csr/AddCsr";
 import ViewCsrModal from "../../components/csr/ViewCsr";
-import { USER_URLS } from "../../utils/config";
+import { CSR_URLS } from "../../utils/config";
 import axios from "axios";
 
 const Csr = () => {
@@ -21,11 +21,12 @@ const Csr = () => {
   const [selectedCsr, setSelectedCsr] = useState(null);
   const [isEdditing, setIsEdditing] = useState(false);
   const [isCsrLoading, setIsCsrLoading] = useState(false);
+
   // Fetch all csrs
   const fetchAllCsrs = async () => {
     setIsCsrLoading(true);
     await axios
-      .get(USER_URLS.USER_GET_CUSTOMERS_URL)
+      .get(CSR_URLS.CSR_GET_ALL_CSR_URL)
       .then((response) => {
         console.log(response.data);
         setCsrs(response.data);
@@ -167,7 +168,7 @@ const Csr = () => {
           <input
             type="text"
             className="form-control w-25"
-            placeholder="Search by name, csr, or price"
+            placeholder="Search by ID, name, or email"
             onChange={handleSearchChange}
           />
 
@@ -190,7 +191,6 @@ const Csr = () => {
       {/* Table */}
       <div>
         {/* Csr Table */}
-
         {isCsrLoading ? (
           <div
             className="spinner-border"
