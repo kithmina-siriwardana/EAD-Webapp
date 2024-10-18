@@ -203,7 +203,7 @@ const Customer = () => {
 
   // Function to handle add button click
   const handleAdd = () => {
-    setEditModal(false);
+    setEditModal(true);
     setNewCustomerData({
       id: "",
       name: "",
@@ -256,9 +256,9 @@ const Customer = () => {
       {/* Header text */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h1>List of All Customers</h1>
-        <Button variant="primary" onClick={handleAdd}>
+        {/* <Button variant="primary" onClick={handleAdd}>
           Add New Customer
-        </Button>
+        </Button> */}
       </div>
 
       {/* Filters */}
@@ -440,6 +440,8 @@ const Customer = () => {
         show={showCustomerModal}
         onClose={() => setShowCustomerModal(false)}
         customer={selectedCustomer}
+        isCustomerUpdated={isCustomerUpdated}
+        setIsCustomerUpdated={setIsCustomerUpdated}
       />
     </div>
   );

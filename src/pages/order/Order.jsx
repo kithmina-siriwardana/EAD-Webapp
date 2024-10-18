@@ -19,6 +19,7 @@ const Order = () => {
   const [orders, setOrders] = useState([]);
   const [newOrderData, setNewOrderData] = useState(null);
   const [editOrderId, setEditOrderId] = useState(null);
+  const [isOrderUpdated, setIsOrderUpdated] = useState(false);
   const loggedInUser = JSON.parse(localStorage.getItem("auth"));
 
   // Get all Orders
@@ -37,7 +38,7 @@ const Order = () => {
   // Fetch Orders on component mount
   useEffect(() => {
     fetchOrders();
-  }, []);
+  }, [loggedInUser && isOrderUpdated]);
 
   // Function to handle add Order on confirm
   const handleAddOrderOnConfirm = () => {
@@ -257,6 +258,8 @@ const Order = () => {
         show={showOrderModal}
         onClose={() => setShowOrderModal(false)}
         order={selectedOrder}
+        setIsOrderUpdated={setIsOrderUpdated}
+        isOrderUpdated={isOrderUpdated}
       />
     </div>
   );

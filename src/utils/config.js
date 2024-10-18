@@ -35,6 +35,7 @@ export const ORDER_URLS = {
   ORDER_GET_BY_ROLE_URL: `${BACKEND_API_URL}/api/order/getByRole`,
   ORDER_GET_BY_ID_URL: `${BACKEND_API_URL}/api/order`,
   ORDER_UPDATE_URL: `${BACKEND_API_URL}/api/order/update`,
+  ORDER_STATUS_UPDATE_URL: `${BACKEND_API_URL}/api/order/updateStatus`,
   ORDER_DELETE_URL: `${BACKEND_API_URL}/api/order/updateStatus`,
 };
 
