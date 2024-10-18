@@ -193,7 +193,7 @@ const Vendor = () => {
             <tr>
               <th>Vendor ID</th>
               <th>Name</th>
-
+              <th>Email</th>
               <th>Rating</th>
               <th>Actions</th>
             </tr>
@@ -207,7 +207,7 @@ const Vendor = () => {
               >
                 <td>{vendor.userId}</td>
                 <td>{vendor.fullName}</td>
-
+                <td>{vendor.email}</td>
                 <td>{vendor.averageRating}</td>
                 <td>
                   <Button

@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import { CATEGORY_URLS } from "../../utils/config";
+
 const AddProductModal = ({
   show,
   onClose,
@@ -47,9 +48,12 @@ const AddProductModal = ({
     e.preventDefault();
     if (initialData?.id) {
       await axios
-        .post(CATEGORY_URLS.CATEGORY_CREATE_URL, categoryData)
+        .put(
+          `${CATEGORY_URLS.CATEGORY_UPDATE_URL}/${categoryData.categoryId}`,
+          categoryData
+        )
         .then((response) => {
-          alert("Category added successfully!");
+          alert("Category updated successfully!");
           onClose();
         })
         .catch((error) => {
@@ -58,12 +62,9 @@ const AddProductModal = ({
         });
     } else {
       await axios
-        .put(
-          `${CATEGORY_URLS.CATEGORY_UPDATE_URL}/${categoryData.categoryId}`,
-          categoryData
-        )
+        .post(CATEGORY_URLS.CATEGORY_CREATE_URL, categoryData)
         .then((response) => {
-          alert("Category updated successfully!");
+          alert("Category added successfully!");
           onClose();
         })
         .catch((error) => {
@@ -108,8 +109,6 @@ const AddProductModal = ({
                   />
                 </Form.Group>
               </Col>
-
-              {/* Right Half - Image Upload */}
             </Row>
 
             <Button variant="primary" type="submit" className="mt-4 ">

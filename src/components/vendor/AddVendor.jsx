@@ -17,6 +17,7 @@ const AddVendorModal = ({
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [newVendorData, setNewVendorData] = useState({});
+  const [newUpdateVendorData, setNewUpdateVendorData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
   // Handle form submission
@@ -28,15 +29,35 @@ const AddVendorModal = ({
       password: password,
       role: "Vendor",
     });
+    setNewUpdateVendorData({
+      fullName: name,
+      email: email,
+      password: password,
+    });
     setShowConfirm(true);
   };
 
   // Call API to add new vendor
   const addVendorOnConfirm = async () => {
     setIsLoading(true);
-
     if (initialData && editVendorId) {
-      console.log("Editing Vendor");
+      console.log("Editing Vendor", newUpdateVendorData);
+      await axios
+        .put(
+          `${AUTH_URLS.VENDOR_UPDATE_URL}/${editVendorId}`,
+          newUpdateVendorData
+        )
+        .then((response) => {
+          console.log(response.data);
+          alert("Vendor updated successfully");
+          setIsLoading(false);
+          setShowConfirm(false);
+          onSuccess();
+        })
+        .catch((error) => {
+          console.log(error);
+          setIsLoading(false);
+        });
       setIsLoading(false);
     } else {
       await axios
