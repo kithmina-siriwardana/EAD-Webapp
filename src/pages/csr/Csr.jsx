@@ -20,14 +20,16 @@ const Csr = () => {
   const [editCsrId, setEditCsrId] = useState(null);
   const [selectedCsr, setSelectedCsr] = useState(null);
   const [isEdditing, setIsEdditing] = useState(false);
-
+  const [isCsrLoading, setIsCsrLoading] = useState(false);
   // Fetch all csrs
   const fetchAllCsrs = async () => {
+    setIsCsrLoading(true);
     await axios
       .get(USER_URLS.USER_GET_CUSTOMERS_URL)
       .then((response) => {
         console.log(response.data);
         setCsrs(response.data);
+        setIsCsrLoading(false);
       })
       .catch((error) => {
         console.log(error);
@@ -188,51 +190,62 @@ const Csr = () => {
       {/* Table */}
       <div>
         {/* Csr Table */}
-        <Table bordered hover>
-          <thead>
-            <tr>
-              <th>CSR ID</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredCsrs.map((csr) => (
-              <tr
-                style={{ cursor: "pointer" }}
-                key={csr.userId}
-                onClick={() => set(csr)}
-              >
-                <td>{csr.userId}</td>
-                <td>{csr.fullName}</td>
-                <td>{csr.email}</td>
 
-                <td>
-                  <Button
-                    variant="warning"
-                    className="me-2"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleEdit(csr.userId);
-                    }}
+        {isCsrLoading ? (
+          <div
+            className="spinner-border"
+            style={{ width: "3rem", height: "3rem" }}
+            role="status"
+          ></div>
+        ) : (
+          <>
+            <Table bordered hover>
+              <thead>
+                <tr>
+                  <th>CSR ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredCsrs.map((csr) => (
+                  <tr
+                    style={{ cursor: "pointer" }}
+                    key={csr.userId}
+                    onClick={() => set(csr)}
                   >
-                    Edit
-                  </Button>
-                  <Button
-                    variant="danger"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDelete(csr.id);
-                    }}
-                  >
-                    Delete
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+                    <td>{csr.userId}</td>
+                    <td>{csr.fullName}</td>
+                    <td>{csr.email}</td>
+
+                    <td>
+                      <Button
+                        variant="warning"
+                        className="me-2"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEdit(csr.userId);
+                        }}
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        variant="danger"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(csr.id);
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </>
+        )}
       </div>
 
       {/* Add Csr Modal */}
