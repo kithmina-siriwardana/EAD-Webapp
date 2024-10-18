@@ -38,24 +38,59 @@ const Category = () => {
   };
 
   // Toggle function to change the status
-  const handleToggleStatus = async (id) => {
-    console.log("Toggling status for category with ID:", id);
-    const updatedCategories = categories.map((category) =>
-      category.id === id ? { ...category, status: !category.status } : category
+  const handleToggleStatus = async (id, currentStatus) => {
+    const newStatus = currentStatus === "active" ? "inactive" : "active";
+
+    console.log(
+      `Toggling status for category with ID: ${id}, new status: ${newStatus}`
     );
 
-    await axios
-      .put(`${CATEGORY_URLS.CATEGORY_UPDATE_URL}/${id}`, {
-        status: updatedCategories.find((category) => category.id === id).status,
-      })
-      .then((response) => {
-        alert("Category updated successfully!");
-      })
-      .catch((error) => {
-        alert("Something went wrong! Please try again later.");
-      });
-    setCategories(updatedCategories);
+    try {
+      const response = await axios.put(
+        `${CATEGORY_URLS.CATEGORY_UPDATE_URL}/${id}`,
+        {
+          status: newStatus,
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("Category updated successfully!");
+        setCategories((prevCategories) =>
+          prevCategories.map((category) =>
+            category.categoryId === id
+              ? { ...category, status: newStatus }
+              : category
+          )
+        );
+      } else {
+        console.error("Failed to update category");
+      }
+    } catch (error) {
+      alert("Something went wrong! Please try again later.");
+      console.error("Error:", error);
+    }
   };
+
+  // // Toggle function to change the status
+  // const handleToggleStatus = async (id) => {
+  //   console.log("Toggling status for category with ID:", id);
+  //   // const updatedCategories = categories.map((category) =>
+  //   //   category.id === id ? { ...category, status: !category.status } : category
+  //   // );
+
+  //   await axios
+  //     .put(`${CATEGORY_URLS.CATEGORY_UPDATE_URL}/${id}`, {
+  //       status: "inactive",
+  //       // status: updatedCategories.find((category) => category.id === id).status,
+  //     })
+  //     .then((response) => {
+  //       console.log("Category updated successfully!");
+  //     })
+  //     .catch((error) => {
+  //       alert("Something went wrong! Please try again later.");
+  //     });
+  //   // setCategories(updatedCategories);
+  // };
 
   // Fetch categories on component mount
   useEffect(() => {
@@ -111,6 +146,8 @@ const Category = () => {
       category.name.toLowerCase().includes(searchQuery) ||
       category.categoryId.toLowerCase().includes(searchQuery);
 
+    console.log("category", category);
+
     const matchesStatus = selectedStatus
       ? category.status.toLowerCase() === selectedStatus.toLowerCase()
       : true;
@@ -136,15 +173,9 @@ const Category = () => {
 
   // Function to handle delete confirmation ///////////////////////////////////// Check this /////////////////////////////////////
   const handleDeleteConfirm = () => {
-    console.log("Delete confirmed");
+    console.log("Delete confirmed", editCategoryId);
     axios
-      .put(CATEGORY_URLS.CATEGORY_DELETE_URL, {
-        data: {
-          categoryId: editCategoryId,
-          vendorId: JSON.parse(localStorage.getItem("auth")).userId,
-          isDeleted: true,
-        },
-      })
+      .delete(`${CATEGORY_URLS.CATEGORY_DELETE_URL}/${editCategoryId}`)
       .then((response) => {
         console.log("Category deleted successfully:", response.data);
         setIsCategoryUpdated(true);
@@ -153,19 +184,18 @@ const Category = () => {
         console.error("Error deleting category:", error);
         alert("Failed to delete category. Please try again.");
       });
-
     setShowModal(false);
   };
 
   const handleAdd = () => {
     setEditModal(false);
-    setNewCategoryData({
-      id: "",
-      name: "",
-      vendor: "",
-      price: "",
-      category: "",
-    });
+    // setNewCategoryData({
+    //   id: "",
+    //   categoryId: "",
+    //   name: "",
+    //   description: "",
+    //   status: "",
+    // });
     setSelectedImages([]);
     setEditCategoryId(null);
     setShowAddCategoryModal(true);
@@ -180,7 +210,7 @@ const Category = () => {
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6; // You can set this to any number of items per page
+  const itemsPerPage = 6;
 
   // Calculate total pages based on filtered categories
   const totalPages = Math.ceil(filteredCategories.length / itemsPerPage);
@@ -241,8 +271,8 @@ const Category = () => {
             onChange={handleStatusChange}
           >
             <option value="">Filter by Status</option>
-            <option value="Active">Active</option>
-            <option value="Inactive">Inactive</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
           </select>
         </div>
       </div>
@@ -289,10 +319,24 @@ const Category = () => {
                         type="switch"
                         id={`custom-switch-${category.categoryId}`}
                         label={category.status}
-                        defaultChecked={category.status === "Active"}
-                        onChange={() => handleToggleStatus(category.categoryId)}
+                        checked={category.status === "active"}
+                        onChange={() =>
+                          handleToggleStatus(
+                            category.categoryId,
+                            category.status
+                          )
+                        }
                       />
                     </td>
+                    {/* <td onClick={() => handleCategoryView(category.userId)}>
+                      <Form.Check
+                        type="switch"
+                        id={`custom-switch-${category.categoryId}`}
+                        label={category.status}
+                        defaultChecked={category.status === "active"}
+                        onChange={() => handleToggleStatus(category.categoryId)}
+                      />
+                    </td> */}
 
                     <td>
                       <Button
@@ -304,7 +348,7 @@ const Category = () => {
                       </Button>
                       <Button
                         variant="danger"
-                        onClick={() => handleDelete(category.id)}
+                        onClick={() => handleDelete(category.categoryId)}
                       >
                         Delete
                       </Button>

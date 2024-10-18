@@ -49,8 +49,8 @@ export const CATEGORY_URLS = {
   CATEGORY_CREATE_URL: `${BACKEND_API_URL}/api/category`,
   CATEGORY_GET_ALL_URL: `${BACKEND_API_URL}/api/category`,
   CATEGORY_GET_BY_ID_URL: `${BACKEND_API_URL}/api/category`,
-  CATEGORY_UPDATE_URL: `${BACKEND_API_URL}/api/category/`,
-  CATEGORY_DELETE_URL: `${BACKEND_API_URL}/api/category/`,
+  CATEGORY_UPDATE_URL: `${BACKEND_API_URL}/api/category`,
+  CATEGORY_DELETE_URL: `${BACKEND_API_URL}/api/category`,
 };
 
 //Vendor
