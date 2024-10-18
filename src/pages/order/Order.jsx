@@ -4,6 +4,7 @@ import ConfirmModal from "../../components/confirm-modal/ConfirmModal";
 import ViewOrderModal from "../../components/order/ViewOrder";
 import axios from "axios";
 import { ORDER_URLS } from "../../utils/config";
+import { Spinner } from "react-bootstrap";
 
 const Order = () => {
   const [showModal, setShowModal] = useState(false);
@@ -170,21 +171,28 @@ const Order = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredOrders.map((Order) => (
-              <tr
-                key={Order.orderid}
-                onClick={() => handleViewDetails(Order)}
-                style={{ cursor: "pointer" }}
-              >
-                <td>{Order.orderId}</td>
-                <td>{Order.customerId}</td>
-                <td>{Order.totalPrice}</td>
-                <td>
-                  {new Date(Order.createdDate).toISOString().split("T")[0]}
-                </td>
-                <td>{Order.status}</td>
-              </tr>
-            ))}
+            {filteredOrders == false ? (
+              <Spinner />
+            ) : (
+              <>
+                {" "}
+                {filteredOrders.map((Order) => (
+                  <tr
+                    key={Order.orderid}
+                    onClick={() => handleViewDetails(Order)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <td>{Order.orderId}</td>
+                    <td>{Order.customerId}</td>
+                    <td>{Order.totalPrice}</td>
+                    <td>
+                      {new Date(Order.createdDate).toISOString().split("T")[0]}
+                    </td>
+                    <td>{Order.status}</td>
+                  </tr>
+                ))}
+              </>
+            )}
           </tbody>
         </Table>
       </div>
@@ -260,6 +268,8 @@ const Order = () => {
         order={selectedOrder}
         setIsOrderUpdated={setIsOrderUpdated}
         isOrderUpdated={isOrderUpdated}
+        fetchOrders={fetchOrders}
+        setSelectedOrder={setSelectedOrder}
       />
     </div>
   );
