@@ -64,6 +64,7 @@ const Product = () => {
 
   // Function to handle adding a new product or editing an existing one
   const handleAddProduct = (product, images) => {
+    console.log("Productdata:---s ", product);
     if (editProductId !== null) {
       // Edit mode
       product.vendor = JSON.parse(localStorage.getItem("auth")).userId;
@@ -111,6 +112,9 @@ const Product = () => {
           console.log("Product added successfully:", response.data);
           setShowAddProductModal(false);
           setIsProductUpdated(true);
+          fetchProducts();
+          fetchCategories();
+          setIsLoading(false);
         });
     } catch (error) {
       console.error("Error adding product:", error);
@@ -121,44 +125,44 @@ const Product = () => {
 
   // Function to handle editing an existing product
   const handleEditProductOnConfirm = async () => {
-    console.log("Updating exsisting product", newProductData);
+    console.log("Updating existing product", newProductData);
     setIsLoading(true);
 
     try {
       const formData = new FormData();
-      formData.append("name", newProductData.name);
-      formData.append("description", newProductData.description);
-      formData.append("price", newProductData.price);
-      if (newProductData.category) {
-        formData.append("categoryID", newProductData.category);
-      }
-      formData.append("productId", newProductData.productId);
-      formData.append("vendorID", newProductData.vendor);
-      formData.append("quantity", newProductData.quantity);
+      formData.append("VendorId", newProductData.vendor || "");
+      formData.append("Price", newProductData.price);
+      formData.append("ProductId", newProductData.productId);
+      formData.append("Quantity", 52);
+      formData.append("Name", newProductData.name);
+      formData.append("IsDeleted", ""); // Add this if needed, or set an appropriate value
+      formData.append("CategoryId", newProductData.category || "");
+      formData.append("Id", ""); // Add this if needed, or set an appropriate value
+      formData.append("Description", newProductData.description);
 
       // Append image files if you have any
       selectedImages.forEach((image) => {
         formData.append("images", image.file);
       });
 
-      await axios
-        .patch(
-          `${PRODUCT_URLS.PRODUCT_UPDATE_URL}/${newProductData.productId}`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        )
-        .then((response) => {
-          console.log("Product updated successfully:", response.data);
-          setShowAddProductModal(false);
-          setIsProductUpdated(true);
-        });
+      console.log("product data----------------- ", formData);
+
+      const response = await axios.patch(
+        `${PRODUCT_URLS.PRODUCT_UPDATE_URL}/${newProductData.productId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log("Product updated successfully:", response.data);
+      setShowAddProductModal(false);
+      setIsProductUpdated(true);
     } catch (error) {
-      console.error("Error adding product:", error);
-      alert("Failed to add product. Please try again.");
+      console.error("Error updating product:", error);
+      alert("Failed to update product. Please try again.");
     }
     setIsLoading(false);
 
@@ -209,12 +213,17 @@ const Product = () => {
   };
 
   // Function to handle delete confirmation ///////////////////////////////////// Check this /////////////////////////////////////
-  const handleDeleteConfirm = () => {
-    axios
+  const handleDeleteConfirm = async () => {
+    setIsLoading(false);
+    await axios
       .delete(`${PRODUCT_URLS.PRODUCT_DELETE_URL}/${editProductId}`)
-      .then((response) => {
+      .then(async (response) => {
         console.log("Product deleted successfully:", response.data);
         setIsProductUpdated(true);
+
+        await fetchProducts();
+        await fetchCategories();
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error("Error deleting product:", error);
@@ -316,7 +325,7 @@ const Product = () => {
 
       {/* Table */}
       <div>
-        {isLoading && products ? (
+        {isLoading || products.length == 0 ? (
           <div
             className="spinner-border"
             style={{ width: "3rem", height: "3rem" }}
@@ -339,7 +348,7 @@ const Product = () => {
                   <th>Quantity</th>
                   <th>Category</th>
                   {/* <th>Status</th> */}
-                  <th>Actions</th>
+                  {loggedInUser.role === "Vendor" && <th>Actions</th>}
                 </tr>
               </thead>
               <tbody>
@@ -367,30 +376,23 @@ const Product = () => {
                     <td onClick={() => handleProductView(product.id)}>
                       {product.categoryName}
                     </td>
-                    {/* <td>
-                      <Form.Check
-                        type="switch"
-                        id={`custom-switch-${product.id}`}
-                        label={product.isActive ? "Active" : "Inactive"}
-                        checked={product.isActive}
-                        onChange={() => handleToggleStatus(product.id)}
-                      />
-                    </td> */}
-                    <td>
-                      <Button
-                        variant="warning"
-                        className="me-2"
-                        onClick={() => handleEdit(product.productId)}
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        variant="danger"
-                        onClick={() => handleDelete(product.productId)}
-                      >
-                        Delete
-                      </Button>
-                    </td>
+                    {loggedInUser.role === "Vendor" && (
+                      <td>
+                        <Button
+                          variant="warning"
+                          className="me-2"
+                          onClick={() => handleEdit(product.productId)}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          variant="danger"
+                          onClick={() => handleDelete(product.productId)}
+                        >
+                          Delete
+                        </Button>
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>
