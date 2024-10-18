@@ -255,7 +255,7 @@ const AddProductModal = ({
                   />
                 </Form.Group>
 
-                <Form.Group controlId="status" className="mt-2">
+                {/* <Form.Group controlId="status" className="mt-2">
                   <Form.Label>Status</Form.Label>
                   <Form.Check
                     type="switch"
@@ -272,7 +272,7 @@ const AddProductModal = ({
                       })
                     }
                   />
-                </Form.Group>
+                </Form.Group> */}
               </Col>
 
               <Col md={6}>

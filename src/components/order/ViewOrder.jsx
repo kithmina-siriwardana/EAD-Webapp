@@ -104,6 +104,7 @@ const ViewOrderModal = ({
       show={show}
       onHide={() => {
         setShowModal(false);
+        setShowDeleteConfirmation(false);
         onClose();
       }}
       size={showModal || showDeleteConfirmation ? "md" : "xl"}

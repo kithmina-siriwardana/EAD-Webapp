@@ -129,10 +129,12 @@ const Product = () => {
       formData.append("name", newProductData.name);
       formData.append("description", newProductData.description);
       formData.append("price", newProductData.price);
-      formData.append("categoryID", newProductData.category);
+      if (newProductData.category) {
+        formData.append("categoryID", newProductData.category);
+      }
       formData.append("productId", newProductData.productId);
       formData.append("vendorID", newProductData.vendor);
-      // formData.append("isActive", newProductData.status);
+      formData.append("quantity", newProductData.quantity);
 
       // Append image files if you have any
       selectedImages.forEach((image) => {
@@ -150,7 +152,7 @@ const Product = () => {
           }
         )
         .then((response) => {
-          console.log("Product added successfully:", response.data);
+          console.log("Product updated successfully:", response.data);
           setShowAddProductModal(false);
           setIsProductUpdated(true);
         });
