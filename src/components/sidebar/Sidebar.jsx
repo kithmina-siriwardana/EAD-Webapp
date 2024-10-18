@@ -75,6 +75,12 @@ const Sidebar = ({ children }) => {
       label: "Customer Management",
       tab: "customer",
     });
+    sidebarItems.push({
+      icon: <FaUser />,
+      redirect: "/csr",
+      label: "CSR Management",
+      tab: "csr",
+    });
   }
 
   // Toggle the sidebar to expand and collapse

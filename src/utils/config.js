@@ -9,7 +9,7 @@ export const AUTH_URLS = {
   APPROVE_CUSTOMER: `${BACKEND_API_URL}/api/auth/approveCustomer`,
 };
 
-// User
+// Customer
 export const USER_URLS = {
   USER_GET_CUSTOMERS_URL: `${BACKEND_API_URL}/api/auth/customers`,
 };

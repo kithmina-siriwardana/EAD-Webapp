@@ -11,6 +11,7 @@ import NotAuthorized from "./pages/NotAuthorized";
 import Profile from "./pages/profile/Profile";
 import Customer from "./pages/customer/Customer";
 import Category from "./pages/category/Category";
+import Csr from "./pages/csr/Csr";
 import "./custom.scss";
 
 const App = () => {
@@ -36,6 +37,7 @@ const App = () => {
           {/* <Route path="/inventory" element={<Inventory />} /> */}
           <Route path="/category" element={<Category />} />
           <Route path="/vendor" element={<Vendor />} />
+          <Route path="/csr" element={<Csr />} />
         </Route>
 
         {/* Default route to redirect to login */}
