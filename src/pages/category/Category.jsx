@@ -24,14 +24,17 @@ const Category = () => {
   const [isCategoryUpdated, setIsCategoryUpdated] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [isCategoryLoading, setIsCategoryLoading] = useState(false);
 
   // Function to handle category fetch
   const fetchCategories = async () => {
     try {
+      setIsCategoryLoading(true);
       const response = await fetch(CATEGORY_URLS.CATEGORY_GET_ALL_URL);
       const data = await response.json();
       console.log("Categories: ", data);
       setCategories(data);
+      setIsCategoryLoading(false);
     } catch (error) {
       console.error("Error fetching categories", error);
     }
@@ -176,7 +179,8 @@ const Category = () => {
     console.log("Delete confirmed", editCategoryId);
     axios
       .delete(`${CATEGORY_URLS.CATEGORY_DELETE_URL}/${editCategoryId}`)
-      .then((response) => {
+      .then(async (response) => {
+        await fetchCategories();
         console.log("Category deleted successfully:", response.data);
         setIsCategoryUpdated(true);
       })
@@ -279,7 +283,7 @@ const Category = () => {
 
       {/* Table */}
       <div>
-        {isLoading && !categories ? (
+        {(isLoading && !categories) || isCategoryLoading ? (
           <div
             className="spinner-border"
             style={{ width: "3rem", height: "3rem" }}
@@ -413,6 +417,8 @@ const Category = () => {
         editModal={editModal}
         selectedImages={selectedImages}
         setSelectedImages={setSelectedImages}
+        fetchCategories={fetchCategories}
+        setNewCategoryData={setNewCategoryData}
       />
       <ConfirmModal
         show={showModal}

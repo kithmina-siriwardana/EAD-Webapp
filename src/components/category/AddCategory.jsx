@@ -11,6 +11,8 @@ const AddProductModal = ({
   editModal,
   selectedImages,
   setSelectedImages,
+  fetchCategories,
+  setNewCategoryData,
 }) => {
   const [categoryData, setCategoryData] = useState(initialData);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -30,6 +32,7 @@ const AddProductModal = ({
     setSelectedImages([]);
     setShowConfirm(false);
     onClose();
+    setNewCategoryData(null);
   };
 
   //inititalize all data
@@ -52,7 +55,8 @@ const AddProductModal = ({
           `${CATEGORY_URLS.CATEGORY_UPDATE_URL}/${categoryData.categoryId}`,
           categoryData
         )
-        .then((response) => {
+        .then(async (response) => {
+          await fetchCategories();
           alert("Category updated successfully!");
           onClose();
         })
@@ -63,7 +67,8 @@ const AddProductModal = ({
     } else {
       await axios
         .post(CATEGORY_URLS.CATEGORY_CREATE_URL, categoryData)
-        .then((response) => {
+        .then(async (response) => {
+          await fetchCategories();
           alert("Category added successfully!");
           onClose();
         })

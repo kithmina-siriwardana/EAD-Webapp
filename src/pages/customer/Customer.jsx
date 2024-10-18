@@ -23,15 +23,19 @@ const Customer = () => {
   const [isCustomerUpdated, setIsCustomerUpdated] = useState(false);
   const [showCustomerModal, setShowCustomerModal] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [isLoadingCustomer, setIsLoadingCustomer] = useState(false);
 
   // Function to handle customer fetch
   const fetchCustomers = async () => {
     try {
+      setIsLoadingCustomer(true);
       const response = await fetch(USER_URLS.USER_GET_CUSTOMERS_URL);
       const data = await response.json();
       console.log("Customers: ", data);
       setCustomers(data);
+      setIsLoadingCustomer(false);
     } catch (error) {
+      setIsLoadingCustomer(false);
       console.error("Error fetching customers", error);
     }
   };
@@ -294,7 +298,7 @@ const Customer = () => {
 
       {/* Table */}
       <div>
-        {isLoading && !customers ? (
+        {isLoadingCustomer ? (
           <div
             className="spinner-border"
             style={{ width: "3rem", height: "3rem" }}

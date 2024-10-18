@@ -19,13 +19,15 @@ const Vendor = () => {
   const [newVendorData, setNewVendorData] = useState(null);
   const [editVendorId, setEditVendorId] = useState(null);
   const [selectedVendor, setSelectedVendor] = useState(null);
-  const [isEdditing, setIsEdditing] = useState(false);
+  const [isLoadingVendor, setIsLoadingVendor] = useState(false);
 
   // Fetch all vendors
   const fetchAllVendors = async () => {
+    setIsLoadingVendor(true);
     await axios
       .get(VENDOR_URLS.VENDOR_GET_ALL_URL)
       .then((response) => {
+        setIsLoadingVendor(false);
         console.log(response.data);
         setVendors(response.data);
       })
@@ -188,52 +190,62 @@ const Vendor = () => {
       {/* Table */}
       <div>
         {/* Vendor Table */}
-        <Table bordered hover>
-          <thead>
-            <tr>
-              <th>Vendor ID</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Rating</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredVendors.map((vendor) => (
-              <tr
-                style={{ cursor: "pointer" }}
-                key={vendor.userId}
-                onClick={() => set(vendor)}
-              >
-                <td>{vendor.userId}</td>
-                <td>{vendor.fullName}</td>
-                <td>{vendor.email}</td>
-                <td>{vendor.averageRating}</td>
-                <td>
-                  <Button
-                    variant="warning"
-                    className="me-2"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleEdit(vendor.userId);
-                    }}
+        {isLoadingVendor ? (
+          <div
+            className="spinner-border"
+            style={{ width: "3rem", height: "3rem" }}
+            role="status"
+          ></div>
+        ) : (
+          <>
+            <Table bordered hover>
+              <thead>
+                <tr>
+                  <th>Vendor ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Rating</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredVendors.map((vendor) => (
+                  <tr
+                    style={{ cursor: "pointer" }}
+                    key={vendor.userId}
+                    onClick={() => set(vendor)}
                   >
-                    Edit
-                  </Button>
-                  <Button
-                    variant="danger"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDelete(vendor.id);
-                    }}
-                  >
-                    Delete
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+                    <td>{vendor.userId}</td>
+                    <td>{vendor.fullName}</td>
+                    <td>{vendor.email}</td>
+                    <td>{vendor.averageRating}</td>
+                    <td>
+                      <Button
+                        variant="warning"
+                        className="me-2"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEdit(vendor.userId);
+                        }}
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        variant="danger"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(vendor.id);
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </>
+        )}
       </div>
 
       {/* Add Vendor Modal */}
