@@ -14,6 +14,11 @@ export const USER_URLS = {
   USER_GET_CUSTOMERS_URL: `${BACKEND_API_URL}/api/auth/customers`,
 };
 
+//CSR
+export const CSR_URLS = {
+  CSR_GET_ALL_CSR_URL: `${BACKEND_API_URL}/api/auth/csrs`,
+};
+
 // Product
 export const PRODUCT_URLS = {
   PRODUCT_CREATE_URL: `${BACKEND_API_URL}/api/product`,
