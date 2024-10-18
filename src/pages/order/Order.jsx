@@ -21,17 +21,21 @@ const Order = () => {
   const [newOrderData, setNewOrderData] = useState(null);
   const [editOrderId, setEditOrderId] = useState(null);
   const [isOrderUpdated, setIsOrderUpdated] = useState(false);
+  const [isOrderLoading, setIsOrderLoading] = useState(false);
   const loggedInUser = JSON.parse(localStorage.getItem("auth"));
 
   // Get all Orders
   const fetchOrders = async () => {
     try {
+      setIsOrderLoading(true);
       const response = await axios.get(
         `${ORDER_URLS.ORDER_GET_BY_ROLE_URL}/${loggedInUser.userId}`
       );
       const modifiedOrders = response.data.map(({ id, ...rest }) => rest);
       setOrders(modifiedOrders);
+      setIsOrderLoading(false);
     } catch (error) {
+      setIsOrderLoading(false);
       console.error("Error fetching Orders", error);
     }
   };
@@ -155,27 +159,31 @@ const Order = () => {
       {/* Table */}
       <div>
         {/* Order Table */}
-        <Table
-          bordered
-          hover
-          style={{ backgroundColor: "#edf2fd" }}
-          className="custom-table"
-        >
-          <thead>
-            <tr>
-              <th>Order ID</th>
-              <th>Customer ID</th>
-              <th>Total Price</th>
-              <th>Placed Date</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredOrders == false ? (
-              <Spinner />
-            ) : (
-              <>
-                {" "}
+
+        {isOrderLoading ? (
+          <div
+            className="spinner-border"
+            style={{ width: "3rem", height: "3rem" }}
+            role="status"
+          ></div>
+        ) : (
+          <>
+            <Table
+              bordered
+              hover
+              style={{ backgroundColor: "#edf2fd" }}
+              className="custom-table"
+            >
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer ID</th>
+                  <th>Total Price</th>
+                  <th>Placed Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
                 {filteredOrders.map((Order) => (
                   <tr
                     key={Order.orderid}
@@ -190,11 +198,11 @@ const Order = () => {
                     </td>
                     <td>{Order.status}</td>
                   </tr>
-                ))}
-              </>
-            )}
-          </tbody>
-        </Table>
+                ))}{" "}
+              </tbody>
+            </Table>
+          </>
+        )}
       </div>
 
       {/* Confirmation of delete Order */}

@@ -17,6 +17,9 @@ const AddProductModal = ({
   const [showModal, setShowModal] = useState(false);
   const [categoryList, setCategoryList] = useState([{}]);
 
+  console.log("cat----------------: ", categoryList);
+  console.log("productData:------------ ", productData);
+
   //initialize data
   useEffect(() => {
     const localData = localStorage.getItem("auth");
@@ -198,7 +201,7 @@ const AddProductModal = ({
                     options={categoryList}
                     value={
                       categoryList.find(
-                        (option) => option.value === productData?.category // Compare by `value`
+                        (option) => option.label === productData?.categoryName // Compare by `value`
                       ) || null
                     }
                     onChange={handleCategoryChange}
