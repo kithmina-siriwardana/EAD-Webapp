@@ -141,6 +141,7 @@ const AddProductModal = ({
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProductData({ ...productData, [name]: value });
+    console.log("productData: ", productData);
   };
 
   const handleSubmit = (e) => {
@@ -233,6 +234,17 @@ const AddProductModal = ({
                   />
                 </Form.Group>
 
+                <Form.Group controlId="quantity" className="mt-2">
+                  <Form.Label>Quantity</Form.Label>
+                  <Form.Control
+                    type="number"
+                    name="quantity"
+                    value={productData?.quantity || ""}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+
                 <Form.Group controlId="description" className="mt-2">
                   <Form.Label>Description</Form.Label>
                   <Form.Control
@@ -240,7 +252,6 @@ const AddProductModal = ({
                     name="description"
                     value={productData?.description || ""}
                     onChange={handleChange}
-                    required
                   />
                 </Form.Group>
 
