@@ -281,8 +281,7 @@ const Product = () => {
       {/* Header text */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h1>List of All Products</h1>
-        {JSON.parse(localStorage.getItem("auth")).role ===
-          ("Vendor" || "Admin") && (
+        {JSON.parse(localStorage.getItem("auth")).role === "Vendor" && (
           <Button variant="primary" onClick={handleAdd}>
             Add New Product
           </Button>

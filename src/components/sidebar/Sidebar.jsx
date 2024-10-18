@@ -33,12 +33,7 @@ const Sidebar = ({ children }) => {
       label: "Dashboard",
       tab: "dashboard",
     },
-    {
-      icon: <AiFillProduct />,
-      redirect: "/product",
-      label: "Product Management",
-      tab: "product",
-    },
+
     {
       icon: <MdProductionQuantityLimits />,
       redirect: "/order",
@@ -46,6 +41,15 @@ const Sidebar = ({ children }) => {
       tab: "order",
     },
   ];
+
+  if (loggedUser && loggedUser.role != "CSR") {
+    sidebarItems.push({
+      icon: <AiFillProduct />,
+      redirect: "/product",
+      label: "Product Management",
+      tab: "product",
+    });
+  }
 
   // Conditionally include the "Inventory Management" tab for admins
   if (loggedUser && loggedUser.role === "Admin") {
@@ -62,6 +66,12 @@ const Sidebar = ({ children }) => {
       label: "Vendor Management",
       tab: "vendor",
     });
+    sidebarItems.push({
+      icon: <FaUser />,
+      redirect: "/csr",
+      label: "CSR Management",
+      tab: "csr",
+    });
   }
 
   // Conditionally include the "Customer Management" tab for admins and CSR
@@ -74,12 +84,6 @@ const Sidebar = ({ children }) => {
       redirect: "/customer",
       label: "Customer Management",
       tab: "customer",
-    });
-    sidebarItems.push({
-      icon: <FaUser />,
-      redirect: "/csr",
-      label: "CSR Management",
-      tab: "csr",
     });
   }
 

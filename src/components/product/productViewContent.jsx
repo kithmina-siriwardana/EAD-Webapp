@@ -51,7 +51,7 @@ export default function ProductViewContent({ productData }) {
             <div className="d-flex flex-row">
               <p className="product-viewe-title">{productData.name}</p>
               <div className="cmt-10">
-                <span
+                {/* <span
                   className={
                     productData.isActive
                       ? "product-viewe-title-status-active"
@@ -59,7 +59,7 @@ export default function ProductViewContent({ productData }) {
                   }
                 >
                   {productData.isActive ? "Active" : "Inactive"}
-                </span>
+                </span> */}
               </div>
             </div>{" "}
             <p style={{ fontWeight: "normal", marginTop: "-25px" }}>

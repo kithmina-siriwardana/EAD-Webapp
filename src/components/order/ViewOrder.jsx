@@ -240,7 +240,8 @@ const ViewOrderModal = ({
                         disabled={
                           order.status === "Delivered" ||
                           order.status === "Cancelled" ||
-                          order.note !== ""
+                          order.note !== "" ||
+                          loggedInUser.role == "Vendor"
                         }
                       >
                         <option value="Purchased">Purchased</option>
@@ -256,17 +257,20 @@ const ViewOrderModal = ({
                         <span style={{ color: "red" }}>{order.note}</span>
                       </p>
                     )}
-                    <Button
-                      variant="danger"
-                      onClick={handleDeleteOrder}
-                      disabled={
-                        order.status === "Delivered" ||
-                        order.status === "Cancelled" ||
-                        order.note !== ""
-                      }
-                    >
-                      Delete this Order
-                    </Button>
+                    {loggedInUser.role != "Vendor" && (
+                      <Button
+                        variant="danger"
+                        onClick={handleDeleteOrder}
+                        disabled={
+                          order.status === "Delivered" ||
+                          order.status === "Cancelled" ||
+                          order.note !== ""
+                        }
+                      >
+                        Delete this Order
+                      </Button>
+                    )}
+
                     <p style={{ marginTop: "20px" }}>
                       <strong>Products:</strong>
                     </p>
@@ -355,17 +359,19 @@ const ViewOrderModal = ({
       <Modal.Footer style={{ backgroundColor: "#edf2fd" }}>
         {!showModal && !showDeleteConfirmation && (
           <span>
-            <Button
-              variant="primary"
-              onClick={handleConfirmationModel}
-              disabled={
-                order.status === "Delivered" ||
-                order.status === "Cancelled" ||
-                order.note !== ""
-              }
-            >
-              Confirm Status Change
-            </Button>
+            {loggedInUser.role != "Vendor" && (
+              <Button
+                variant="primary"
+                onClick={handleConfirmationModel}
+                disabled={
+                  order.status === "Delivered" ||
+                  order.status === "Cancelled" ||
+                  order.note !== ""
+                }
+              >
+                Confirm Status Change
+              </Button>
+            )}
           </span>
         )}
       </Modal.Footer>
