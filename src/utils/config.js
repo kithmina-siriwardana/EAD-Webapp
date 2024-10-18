@@ -5,6 +5,7 @@ export const AUTH_URLS = {
   LOGIN_URL: `${BACKEND_API_URL}/api/auth/login`,
   REGISTER_URL: `${BACKEND_API_URL}/api/auth/register`,
   VENDOR_DELETE_URL: `${BACKEND_API_URL}/api/auth/vendorDelete`,
+  VENDOR_UPDATE_URL: `${BACKEND_API_URL}/api/auth/updateProfile`,
   APPROVE_CUSTOMER: `${BACKEND_API_URL}/api/auth/approveCustomer`,
 };
 

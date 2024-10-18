@@ -8,10 +8,54 @@ const AddVendorForm = (initialData) => {
     setVendorData(initialData);
   }, [initialData]);
 
+  // // Handle data change
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setVendorData({ ...vendorData, [name]: value });
+  // };
+
   // Handle data change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setVendorData({ ...vendorData, [name]: value });
+
+    // Validate password and confirm password
+    if (name === "password") {
+      validatePassword(value);
+    } else if (name === "confirmPassword") {
+      validateConfirmPassword(value, vendorData.password);
+    }
+  };
+
+  // Handle form submission
+  const validatePassword = (password) => {
+    const minLength = password.length >= 8;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /\d/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    if (
+      !minLength ||
+      !hasUpperCase ||
+      !hasLowerCase ||
+      !hasNumber ||
+      !hasSpecialChar
+    ) {
+      setError(
+        "Password must be at least 8 characters long, contain a capital letter, a lowercase letter, a number, and a special character."
+      );
+    } else {
+      setError("");
+    }
+  };
+
+  const validateConfirmPassword = (confirmPassword, password) => {
+    if (confirmPassword !== password) {
+      setError("Passwords do not match.");
+    } else {
+      setError("");
+    }
   };
 
   // Handle form submission
@@ -44,7 +88,7 @@ const AddVendorForm = (initialData) => {
         />
       </Form.Group>
 
-      <Form.Group controlId="price" className="mt-2">
+      <Form.Group controlId="password" className="mt-2">
         <Form.Label>Password</Form.Label>
         <Form.Control
           type="password"
@@ -52,6 +96,11 @@ const AddVendorForm = (initialData) => {
           onChange={handleChange}
           required
         />
+        {error && (
+          <Alert variant="danger" className="mt-2">
+            {error}
+          </Alert>
+        )}
       </Form.Group>
 
       <Form.Group controlId="price" className="mt-2">
