@@ -133,7 +133,7 @@ const Product = () => {
       formData.append("VendorId", newProductData.vendor || "");
       formData.append("Price", newProductData.price);
       formData.append("ProductId", newProductData.productId);
-      formData.append("Quantity", 52);
+      formData.append("Quantity", newProductData.quantity || 0);
       formData.append("Name", newProductData.name);
       formData.append("IsDeleted", ""); // Add this if needed, or set an appropriate value
       formData.append("CategoryId", newProductData.category || "");
