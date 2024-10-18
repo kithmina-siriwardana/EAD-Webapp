@@ -3,28 +3,22 @@ import { Modal, Button, Form, Alert } from "react-bootstrap";
 import axios from "axios";
 import { AUTH_URLS } from "../../utils/config";
 
-const AddVendorModal = ({
-  show,
-  onClose,
-  initialData,
-  onSuccess,
-  editVendorId,
-}) => {
-  const [initialVendorData, setInitialVendorData] = useState(initialData);
+const AddCsrModal = ({ show, onClose, initialData, onSuccess, editCsrId }) => {
+  const [initialCsrData, setInitialCsrData] = useState(initialData);
   const [showConfirm, setShowConfirm] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [newVendorData, setNewVendorData] = useState({});
-  const [newUpdateVendorData, setNewUpdateVendorData] = useState({});
+  const [newCsrData, setNewCsrData] = useState({});
+  const [newUpdateCsrData, setNewUpdateCsrData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
   // Validation states
-  const [passwordError, setPasswordError] = useState("");
-  const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
   // Validate password
   const validatePassword = (password) => {
@@ -68,7 +62,7 @@ const AddVendorModal = ({
 
     // Validate Vendor Name and Email
     if (!name.trim()) {
-      setNameError("Vendor Name cannot be empty.");
+      setNameError("Name cannot be empty.");
       return;
     }
 
@@ -87,13 +81,21 @@ const AddVendorModal = ({
       return;
     }
 
-    setNewVendorData({
+    // Validate password structure
+    validatePassword(password);
+    if (passwordError) return;
+
+    // Validate confirm password
+    validateConfirmPassword(confirmPassword);
+    if (confirmPasswordError) return;
+
+    setNewCsrData({
       fullName: name,
       email: email,
       password: password,
-      role: "Vendor",
+      role: "CSR",
     });
-    setNewUpdateVendorData({
+    setNewUpdateCsrData({
       fullName: name,
       email: email,
       password: password,
@@ -101,19 +103,16 @@ const AddVendorModal = ({
     setShowConfirm(true);
   };
 
-  // Call API to add new vendor
-  const addVendorOnConfirm = async () => {
+  // Call API to add new CSR
+  const addCsrOnConfirm = async () => {
     setIsLoading(true);
-    if (initialData && editVendorId) {
-      console.log("Editing Vendor", newUpdateVendorData);
+    if (initialData && editCsrId) {
+      console.log("Editing CSR", newUpdateCsrData);
       await axios
-        .put(
-          `${AUTH_URLS.VENDOR_UPDATE_URL}/${editVendorId}`,
-          newUpdateVendorData
-        )
+        .put(`${AUTH_URLS.VENDOR_UPDATE_URL}/${editCsrId}`, newUpdateCsrData)
         .then((response) => {
           console.log(response.data);
-          alert("Vendor updated successfully");
+          alert("CSR updated successfully");
           setIsLoading(false);
           setShowConfirm(false);
           onSuccess();
@@ -125,7 +124,7 @@ const AddVendorModal = ({
       setIsLoading(false);
     } else {
       await axios
-        .post(AUTH_URLS.REGISTER_URL, newVendorData)
+        .post(AUTH_URLS.REGISTER_URL, newCsrData)
         .then((response) => {
           console.log(response.data);
           setIsLoading(false);
@@ -143,40 +142,40 @@ const AddVendorModal = ({
     <Modal show={show} onHide={onClose}>
       <Modal.Header closeButton style={{ backgroundColor: "#edf2fd" }}>
         {showConfirm ? (
-          <Modal.Title>Confirm New Vendor</Modal.Title>
+          <Modal.Title>Confirm New CSR</Modal.Title>
         ) : (
           <Modal.Title>
-            {initialData?.userId ? "Edit Vendor" : "Add New Vendor"}
+            {initialData?.userId ? "Edit CSR" : "Add New CSR"}
           </Modal.Title>
         )}
       </Modal.Header>
       {/* Modal Body */}
       <Modal.Body style={{ backgroundColor: "#f7f8ff" }}>
         {showConfirm ? (
-          <>Are you sure you want to add this vendor?</>
+          <>Are you sure you want to add this CSR?</>
         ) : (
           <>
             <Form onSubmit={handleSubmit}>
-              {/* Editable Vendor ID for Adding New Vendor */}
-              {initialData && editVendorId && (
+              {/* Editable CSR ID for Adding New CSR */}
+              {initialData && editCsrId && (
                 <Form.Group className="mt-2">
-                  <Form.Label>Vendor ID</Form.Label>
+                  <Form.Label>CSR ID</Form.Label>
                   <Form.Control
                     disabled
                     type="text"
                     name="userId"
-                    value={initialData && editVendorId ? editVendorId : ""}
+                    value={initialData && editCsrId ? editCsrId : ""}
                   />
                 </Form.Group>
               )}
 
               <Form.Group className="mt-2">
-                <Form.Label>Vendor Name</Form.Label>
+                <Form.Label>Name</Form.Label>
                 <Form.Control
                   type="text"
                   name="fullName"
                   defaultValue={
-                    initialData && editVendorId ? initialData.fullName : ""
+                    initialData && editCsrId ? initialData.fullName : ""
                   }
                   onChange={(e) => setName(e.target.value)}
                   required
@@ -195,7 +194,7 @@ const AddVendorModal = ({
                   type="text"
                   name="email"
                   defaultValue={
-                    initialData && editVendorId ? initialData.email : ""
+                    initialData && editCsrId ? initialData.email : ""
                   }
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -262,7 +261,7 @@ const AddVendorModal = ({
             <Button
               disabled={isLoading}
               variant={"success"}
-              onClick={addVendorOnConfirm}
+              onClick={addCsrOnConfirm}
               style={{ minWidth: "80px" }}
             >
               Yes
@@ -275,7 +274,7 @@ const AddVendorModal = ({
             className="mt-4"
             onClick={handleSubmit}
           >
-            {initialData?.userId ? "Update Vendor" : "Add Vendor"}
+            {initialData?.userId ? "Update CSR" : "Add CSR"}
           </Button>
         )}
       </Modal.Footer>
@@ -283,4 +282,4 @@ const AddVendorModal = ({
   );
 };
 
-export default AddVendorModal;
+export default AddCsrModal;
