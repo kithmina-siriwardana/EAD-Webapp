@@ -3,7 +3,13 @@ import { Modal, Button } from "react-bootstrap";
 import { AUTH_URLS } from "../../utils/config";
 import axios from "axios";
 
-const ViewCustomerModal = ({ show, onClose, customer }) => {
+const ViewCustomerModal = ({
+  show,
+  onClose,
+  customer,
+  isCustomerUpdated,
+  setIsCustomerUpdated,
+}) => {
   const [showModal, setShowModal] = useState(false);
   const [showCustomerView, setShowCustomerView] = useState(false);
   const [customerStatus, setCustomerStatus] = useState("");
@@ -13,12 +19,19 @@ const ViewCustomerModal = ({ show, onClose, customer }) => {
     if (customer) {
       setCustomerStatus(customer.isApproved ? "Approved" : "Pending");
     }
-  }, [customer]);
+  }, [customer, isCustomerUpdated]);
 
-  //approve customer
   const handleConfirmationModel = async () => {
-    await axios.put(`${AUTH_URLS.REGISTER_URL}/${customer.userId}`);
     setShowModal(!showModal);
+  };
+
+  const handleApproveCustomer = async () => {
+    const response = await axios.put(
+      `${AUTH_URLS.APPROVE_CUSTOMER}/${customer.userId}`
+    );
+    setIsCustomerUpdated(!isCustomerUpdated);
+    onClose();
+    console.log(response.message);
   };
 
   return (
@@ -35,7 +48,9 @@ const ViewCustomerModal = ({ show, onClose, customer }) => {
         {showModal ? (
           <Modal.Title>Approve Customer</Modal.Title>
         ) : (
-          <Modal.Title>Customer Details - {customer.fullName}</Modal.Title>
+          <Modal.Title>
+            Customer Details - {customer?.fullName && customer.fullName}
+          </Modal.Title>
         )}
       </Modal.Header>
       <Modal.Body style={{ backgroundColor: "#f7f8ff" }}>
@@ -60,7 +75,7 @@ const ViewCustomerModal = ({ show, onClose, customer }) => {
               </Button>
               <Button
                 variant="success"
-                onClick={handleConfirmationModel}
+                onClick={handleApproveCustomer}
                 style={{ minWidth: "80px" }}
               >
                 Yes
@@ -74,17 +89,20 @@ const ViewCustomerModal = ({ show, onClose, customer }) => {
             ) : (
               <div>
                 <p>
-                  <strong>Customer ID: {customer.userId}</strong>
+                  <strong>
+                    Customer ID: {customer?.userId && customer.userId}
+                  </strong>
                 </p>
                 <p>
-                  <strong>Full Name:</strong> ${customer.fullName}
+                  <strong>Full Name:</strong> $
+                  {customer?.fullName && customer.fullName}
                 </p>
                 <p>
-                  <strong>E-mail:</strong> {customer.email}
+                  <strong>E-mail:</strong> {customer?.email && customer.email}
                 </p>
-                <p>
+                {/* <p>
                   <strong>Rating:</strong> {customer.email}
-                </p>
+                </p> */}
                 <p>
                   <strong>Customer Status:</strong>{" "}
                   <span

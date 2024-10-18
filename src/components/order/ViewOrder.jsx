@@ -5,11 +5,18 @@ import ProductViewContent from "../product/productViewContent";
 import { ORDER_URLS, ORDER_ITEMS } from "../../utils/config";
 import axios from "axios";
 
-const ViewOrderModal = ({ show, onClose, order }) => {
+const ViewOrderModal = ({
+  show,
+  onClose,
+  order,
+  setIsOrderUpdated,
+  isOrderUpdated,
+}) => {
   const [showModal, setShowModal] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [showProductView, setShowProductView] = useState(false);
   const [orderItems, setOrderItems] = useState([]);
+  const [orderStatus, setOrderStatus] = useState("");
 
   const loggedInUser = JSON.parse(localStorage.getItem("auth"));
 
@@ -23,6 +30,26 @@ const ViewOrderModal = ({ show, onClose, order }) => {
   //handle confirmation model
   const handleConfirmationModel = () => {
     setShowModal(!showModal);
+  };
+
+  const updateOrderStatus = async () => {
+    try {
+      await axios
+        .patch(`${ORDER_URLS.ORDER_STATUS_UPDATE_URL}/${order.orderId}`, {
+          newStatus: orderStatus,
+        })
+        .then((response) => {
+          console.log("response", response);
+          alert("Order status updated successfully");
+          setIsOrderUpdated(!isOrderUpdated);
+          setShowModal(false);
+          onClose();
+        });
+    } catch (error) {
+      alert("Failed to update order status. Please try again.");
+      setShowModal(false);
+      onClose();
+    }
   };
 
   //enable product view
@@ -75,7 +102,10 @@ const ViewOrderModal = ({ show, onClose, order }) => {
   return (
     <Modal
       show={show}
-      onHide={onClose}
+      onHide={() => {
+        setShowModal(false);
+        onClose();
+      }}
       size={showModal || showDeleteConfirmation ? "md" : "xl"}
       scrollable
     >
@@ -113,7 +143,7 @@ const ViewOrderModal = ({ show, onClose, order }) => {
                 </Button>
                 <Button
                   variant="success"
-                  onClick={handleConfirmationModel}
+                  onClick={updateOrderStatus}
                   style={{ minWidth: "80px" }}
                 >
                   Yes
@@ -176,7 +206,11 @@ const ViewOrderModal = ({ show, onClose, order }) => {
                           marginLeft: "10px",
                         }}
                         disabled={loggedInUser.role !== "Admin"}
-                        defaultValue={order.status} // Corrected this line
+                        defaultValue={order.status}
+                        onChange={(e) => {
+                          setOrderStatus(e.target.value);
+                          console.log("order status", e.target.value);
+                        }}
                       >
                         <option value="Purchased">Purchased</option>
                         <option value="Processing">Processing</option>
