@@ -6,6 +6,7 @@ import AddProductModal from "../../components/product/AddProduct";
 import ViewProduct from "../../components/product/ViewProduct";
 import { PRODUCT_URLS, CATEGORY_URLS } from "../../utils/config";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 const Product = () => {
   const [showModal, setShowModal] = useState(false);
@@ -109,7 +110,7 @@ const Product = () => {
           },
         })
         .then((response) => {
-          console.log("Product added successfully:", response.data);
+          toast.success("Product added successfully:");
           setShowAddProductModal(false);
           setIsProductUpdated(true);
           fetchProducts();
@@ -118,7 +119,7 @@ const Product = () => {
         });
     } catch (error) {
       console.error("Error adding product:", error);
-      alert("Failed to add product. Please try again.");
+      toast.error("Failed to add product. Please try again.");
     }
     setIsLoading(false);
   };
@@ -157,12 +158,12 @@ const Product = () => {
         }
       );
 
-      console.log("Product updated successfully:", response.data);
+      toast.success("Product updated successfully:");
       setShowAddProductModal(false);
       setIsProductUpdated(true);
     } catch (error) {
       console.error("Error updating product:", error);
-      alert("Failed to update product. Please try again.");
+      toast.error("Failed to update product. Please try again.");
     }
     setIsLoading(false);
 
@@ -218,16 +219,16 @@ const Product = () => {
     await axios
       .delete(`${PRODUCT_URLS.PRODUCT_DELETE_URL}/${editProductId}`)
       .then(async (response) => {
-        console.log("Product deleted successfully:", response.data);
         setIsProductUpdated(true);
 
         await fetchProducts();
         await fetchCategories();
         setIsLoading(false);
+        toast.success("Product deleted successfully");
       })
       .catch((error) => {
         console.error("Error deleting product:", error);
-        alert("Failed to delete product. Please try again.");
+        toast.error("Failed to delete product. Please try again.");
       });
     setShowModal(false);
   };

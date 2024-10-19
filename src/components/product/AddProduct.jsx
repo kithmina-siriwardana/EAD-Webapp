@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import Select from "react-select";
 import { CATEGORY_URLS } from "../../utils/config";
+import toast, { Toaster } from "react-hot-toast";
 
 const AddProductModal = ({
   show,
@@ -82,7 +83,7 @@ const AddProductModal = ({
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     if (files.length + selectedImages.length > 5) {
-      alert("You can upload up to 5 images.");
+      toast.error("You can upload up to 5 images.");
       return;
     }
     const newImages = files.map((file) => ({
@@ -156,6 +157,7 @@ const AddProductModal = ({
 
   return (
     <>
+      <Toaster />
       <Modal show={show} onHide={handleModalClose} size="xl" scrollable>
         <Modal.Header closeButton style={{ backgroundColor: "#edf2fd" }}>
           {showModal ? (

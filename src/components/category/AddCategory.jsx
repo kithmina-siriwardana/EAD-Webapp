@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import { CATEGORY_URLS } from "../../utils/config";
+import toast, { Toaster } from "react-hot-toast";
 
 const AddProductModal = ({
   show,
@@ -57,30 +58,31 @@ const AddProductModal = ({
         )
         .then(async (response) => {
           await fetchCategories();
-          alert("Category updated successfully!");
+          toast.success("Category updated successfully!");
           onClose();
         })
         .catch((error) => {
           console.error(error);
-          alert("Something went wrong! Please try again later.");
+          toast.error("Something went wrong! Please try again later.");
         });
     } else {
       await axios
         .post(CATEGORY_URLS.CATEGORY_CREATE_URL, categoryData)
         .then(async (response) => {
           await fetchCategories();
-          alert("Category added successfully!");
+          toast.success("Category added successfully!");
           onClose();
         })
         .catch((error) => {
           console.error(error);
-          alert("Something went wrong! Please try again later.");
+          toast.error("Something went wrong! Please try again later.");
         });
     }
   };
 
   return (
     <>
+      <Toaster />
       <Modal show={show} onHide={handleModalClose} scrollable>
         <Modal.Header closeButton style={{ backgroundColor: "#edf2fd" }}>
           <Modal.Title>
