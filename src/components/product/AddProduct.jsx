@@ -229,7 +229,7 @@ const AddProductModal = ({
                 </Form.Group> */}
 
                 <Form.Group controlId="price" className="mt-2">
-                  <Form.Label>Price</Form.Label>
+                  <Form.Label>Price (Rs.)</Form.Label>
                   <Form.Control
                     type="number"
                     name="price"

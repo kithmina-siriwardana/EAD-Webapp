@@ -220,7 +220,6 @@ const Product = () => {
       .delete(`${PRODUCT_URLS.PRODUCT_DELETE_URL}/${editProductId}`)
       .then(async (response) => {
         setIsProductUpdated(true);
-
         await fetchProducts();
         await fetchCategories();
         setIsLoading(false);
@@ -228,7 +227,7 @@ const Product = () => {
       })
       .catch((error) => {
         console.error("Error deleting product:", error);
-        toast.error("Failed to delete product. Please try again.");
+        toast.error("Product is currently being used in an order.");
       });
     setShowModal(false);
   };
@@ -279,6 +278,7 @@ const Product = () => {
 
   return (
     <div className="px-4 my-4">
+      <Toaster />
       {/* Header text */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h1>List of All Products</h1>
@@ -344,7 +344,7 @@ const Product = () => {
                   <th>Product ID</th>
                   <th>Product Name</th>
                   <th>Vendor </th>
-                  <th>Price</th>
+                  <th>Price (Rs.)</th>
                   <th>Quantity</th>
                   <th>Category</th>
                   {/* <th>Status</th> */}

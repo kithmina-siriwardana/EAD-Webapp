@@ -221,7 +221,7 @@ const ViewOrderModal = ({
                         <strong>Order ID: {order.orderId}</strong>
                       </p>
                       <p>
-                        <strong>Total Price:</strong> ${order.totalPrice}
+                        <strong>Total Price:</strong> Rs.{order.totalPrice}
                       </p>
                       <p>
                         <strong>Placed Date:</strong>{" "}
@@ -248,7 +248,6 @@ const ViewOrderModal = ({
                           disabled={
                             order.status === "Delivered" ||
                             order.status === "Cancelled" ||
-                            order.note !== "" ||
                             loggedInUser.role == "Vendor"
                           }
                         >
@@ -271,8 +270,8 @@ const ViewOrderModal = ({
                           onClick={handleDeleteOrder}
                           disabled={
                             order.status === "Delivered" ||
-                            order.status === "Cancelled" ||
-                            order.note !== ""
+                            order.status === "Dispatched" ||
+                            order.status === "Cancelled"
                           }
                         >
                           Delete this Order
@@ -293,7 +292,7 @@ const ViewOrderModal = ({
                             <th>Product ID</th>
                             <th>Product Name</th>
                             <th>Vendor</th>
-                            <th>Price</th>
+                            <th>Price (Rs.)</th>
                             <th>Quantity</th>
                             <th>Status</th>
                           </tr>
@@ -381,9 +380,7 @@ const ViewOrderModal = ({
                   variant="primary"
                   onClick={handleConfirmationModel}
                   disabled={
-                    order.status === "Delivered" ||
-                    order.status === "Cancelled" ||
-                    order.note !== ""
+                    order.status === "Delivered" || order.status === "Cancelled"
                   }
                 >
                   Confirm Status Change

@@ -58,58 +58,60 @@ const Login = () => {
         })
         .catch((error) => {
           console.error(error);
-          toast.error("Something went wrong! Please try again later.");
+          toast.error("Please check your login credentials try again.");
         });
     }
     setIsLoading(false);
   };
 
   return (
-    <div className="login-container">
-      <div className="login-form">
-        <h2 className="login-title">Login</h2>
-        <div className="form-group">
-          <label htmlFor="username">Email</label>
-          <input
-            type="email"
-            id="username"
-            className="form-control"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+    <>
+      <Toaster />
+      <div className="login-container">
+        <div className="login-form">
+          <h2 className="login-title">Login</h2>
+          <div className="form-group">
+            <label htmlFor="username">Email</label>
+            <input
+              type="email"
+              id="username"
+              className="form-control"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              className="form-control"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <Button
+            className="login-btn"
+            onClick={handleLogin}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+            ) : (
+              "Login"
+            )}
+          </Button>
         </div>
-        <div className="form-group">
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            className="form-control"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <Button
-          className="login-btn"
-          onClick={handleLogin}
-          disabled={isLoading}
-        >
-          {isLoading ? (
-            <span
-              class="spinner-border spinner-border-sm"
-              role="status"
-              aria-hidden="true"
-            ></span>
-          ) : (
-            "Login"
-          )}
-        </Button>
-        <BottomLinks />
       </div>
-    </div>
+    </>
   );
 };
 

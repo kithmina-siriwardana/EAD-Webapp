@@ -168,39 +168,61 @@ const Order = () => {
           ></div>
         ) : (
           <>
-            <Table
-              bordered
-              hover
-              style={{ backgroundColor: "#edf2fd" }}
-              className="custom-table"
-            >
-              <thead>
-                <tr>
-                  <th>Order ID</th>
-                  <th>Customer ID</th>
-                  <th>Total Price</th>
-                  <th>Placed Date</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredOrders.map((Order) => (
-                  <tr
-                    key={Order.orderid}
-                    onClick={() => handleViewDetails(Order)}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <td>{Order.orderId}</td>
-                    <td>{Order.customerId}</td>
-                    <td>{Order.totalPrice}</td>
-                    <td>
-                      {new Date(Order.createdDate).toISOString().split("T")[0]}
-                    </td>
-                    <td>{Order.status}</td>
+            {filteredOrders.length == 0 ? (
+              <>
+                <div
+                  style={{
+                    width: "full",
+                    display: "flex",
+                    justifyContent: "center",
+                    textAlign: "center",
+                    height: "100vh",
+                    marginTop: "25vh",
+                    fontSize: "30px",
+                  }}
+                >
+                  No records were found
+                </div>
+              </>
+            ) : (
+              <Table
+                bordered
+                hover
+                style={{ backgroundColor: "#edf2fd" }}
+                className="custom-table"
+              >
+                <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Customer ID</th>
+                    <th>Total Price (Rs.)</th>
+                    <th>Placed Date</th>
+                    <th>Status</th>
                   </tr>
-                ))}{" "}
-              </tbody>
-            </Table>
+                </thead>
+                <tbody>
+                  {filteredOrders.map((Order) => (
+                    <tr
+                      key={Order.orderid}
+                      onClick={() => handleViewDetails(Order)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <td>{Order.orderId}</td>
+                      <td>{Order.customerId}</td>
+                      <td>{Order.totalPrice}</td>
+                      <td>
+                        {
+                          new Date(Order.createdDate)
+                            .toISOString()
+                            .split("T")[0]
+                        }
+                      </td>
+                      <td>{Order.status}</td>
+                    </tr>
+                  ))}{" "}
+                </tbody>
+              </Table>
+            )}
           </>
         )}
       </div>
