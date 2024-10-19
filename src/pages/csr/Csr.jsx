@@ -230,7 +230,7 @@ const Csr = () => {
                       >
                         Edit
                       </Button>
-                      <Button
+                      {/* <Button
                         variant="danger"
                         onClick={(e) => {
                           e.stopPropagation();
@@ -238,7 +238,7 @@ const Csr = () => {
                         }}
                       >
                         Delete
-                      </Button>
+                      </Button> */}
                     </td>
                   </tr>
                 ))}

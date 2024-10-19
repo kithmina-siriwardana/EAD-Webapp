@@ -5,6 +5,7 @@ import ConfirmModal from "../../components/confirm-modal/ConfirmModal";
 import ViewCustomerModal from "../../components/customer/ViewCustomer";
 import { PRODUCT_URLS, USER_URLS } from "../../utils/config";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 const Customer = () => {
   const [showModal, setShowModal] = useState(false);
@@ -88,13 +89,13 @@ const Customer = () => {
           },
         })
         .then((response) => {
-          console.log("Customer added successfully:", response.data);
+          toast.success("Customer added successfully!");
           setShowAddCustomerModal(false);
           setIsCustomerUpdated(true);
         });
     } catch (error) {
       console.error("Error adding customer:", error);
-      alert("Failed to add customer. Please try again.");
+      toast.error("Failed to add customer. Please try again.");
     }
     setIsLoading(false);
   };
@@ -126,13 +127,12 @@ const Customer = () => {
           },
         })
         .then((response) => {
-          console.log("Customer added successfully:", response.data);
+          toast.success("Customer added successfully:");
           setShowAddCustomerModal(false);
           setIsCustomerUpdated(true);
         });
     } catch (error) {
-      console.error("Error adding customer:", error);
-      alert("Failed to add customer. Please try again.");
+      toast.error("Failed to add customer. Please try again.");
     }
     setIsLoading(false);
 
@@ -194,12 +194,12 @@ const Customer = () => {
         },
       })
       .then((response) => {
-        console.log("Customer deleted successfully:", response.data);
+        toast.success("Customer deleted successfully");
         setIsCustomerUpdated(true);
       })
       .catch((error) => {
         console.error("Error deleting customer:", error);
-        alert("Failed to delete customer. Please try again.");
+        toast.error("Failed to delete customer. Please try again.");
       });
 
     setShowModal(false);

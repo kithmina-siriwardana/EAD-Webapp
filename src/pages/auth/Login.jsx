@@ -4,6 +4,7 @@ import { Button, Col, Row } from "react-bootstrap";
 import { AUTH_URLS } from "../../utils/config";
 import axios from "axios";
 import "./Login.css";
+import toast, { Toaster } from "react-hot-toast";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -57,7 +58,7 @@ const Login = () => {
         })
         .catch((error) => {
           console.error(error);
-          alert("Something went wrong! Please try again later.");
+          toast.error("Something went wrong! Please try again later.");
         });
     }
     setIsLoading(false);

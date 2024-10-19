@@ -5,6 +5,7 @@ import ConfirmModal from "../../components/confirm-modal/ConfirmModal";
 import AddCategoryModal from "../../components/category/AddCategory";
 import { CATEGORY_URLS } from "../../utils/config";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 const Category = () => {
   const [showModal, setShowModal] = useState(false);
@@ -57,7 +58,7 @@ const Category = () => {
       );
 
       if (response.status === 200) {
-        console.log("Category updated successfully!");
+        toast.success("Category updated successfully!");
         setCategories((prevCategories) =>
           prevCategories.map((category) =>
             category.categoryId === id
@@ -66,10 +67,10 @@ const Category = () => {
           )
         );
       } else {
-        console.error("Failed to update category");
+        toast.error("Failed to update category");
       }
     } catch (error) {
-      alert("Something went wrong! Please try again later.");
+      toast.error("Something went wrong! Please try again later.");
       console.error("Error:", error);
     }
   };
@@ -181,12 +182,12 @@ const Category = () => {
       .delete(`${CATEGORY_URLS.CATEGORY_DELETE_URL}/${editCategoryId}`)
       .then(async (response) => {
         await fetchCategories();
-        console.log("Category deleted successfully:", response.data);
+        toast.success("Category deleted successfully!");
         setIsCategoryUpdated(true);
       })
       .catch((error) => {
         console.error("Error deleting category:", error);
-        alert("Failed to delete category. Please try again.");
+        toast.error("Failed to delete category. Please try again.");
       });
     setShowModal(false);
   };
@@ -242,6 +243,7 @@ const Category = () => {
 
   return (
     <div className="px-4 my-4">
+      <Toaster />
       {/* Header text */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h1>List of All Categories</h1>

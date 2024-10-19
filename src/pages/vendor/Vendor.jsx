@@ -230,15 +230,6 @@ const Vendor = () => {
                       >
                         Edit
                       </Button>
-                      <Button
-                        variant="danger"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDelete(vendor.id);
-                        }}
-                      >
-                        Delete
-                      </Button>
                     </td>
                   </tr>
                 ))}
