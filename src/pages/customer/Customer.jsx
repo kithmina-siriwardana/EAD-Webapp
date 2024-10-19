@@ -306,43 +306,61 @@ const Customer = () => {
           ></div>
         ) : (
           <>
-            <Table
-              bordered
-              hover
-              style={{ backgroundColor: "#edf2fd" }}
-              className="custom-table"
-            >
-              <thead>
-                <tr>
-                  <th>Customer ID</th>
-                  <th>Customer Name</th>
-                  <th>Email </th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredCustomers.map((customer) => (
-                  <tr
-                    key={customer.userId}
-                    onClick={() => handleViewDetails(customer)}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <td onClick={() => handleCustomerView(customer.userId)}>
-                      {customer.userId}
-                    </td>
-                    <td onClick={() => handleCustomerView(customer.userId)}>
-                      {customer.fullName}
-                    </td>
-                    <td onClick={() => handleCustomerView(customer.userId)}>
-                      {customer.email}
-                    </td>
-                    <td onClick={() => handleCustomerView(customer.userId)}>
-                      {customer.isApproved ? "Approved" : "Pending"}
-                    </td>
+            {filteredCustomers.length == 0 ? (
+              <>
+                <div
+                  style={{
+                    width: "full",
+                    display: "flex",
+                    justifyContent: "center",
+                    textAlign: "center",
+                    height: "100vh",
+                    marginTop: "25vh",
+                    fontSize: "30px",
+                  }}
+                >
+                  No records were found
+                </div>
+              </>
+            ) : (
+              <Table
+                bordered
+                hover
+                style={{ backgroundColor: "#edf2fd" }}
+                className="custom-table"
+              >
+                <thead>
+                  <tr>
+                    <th>Customer ID</th>
+                    <th>Customer Name</th>
+                    <th>Email </th>
+                    <th>Status</th>
                   </tr>
-                ))}
-              </tbody>
-            </Table>
+                </thead>
+                <tbody>
+                  {filteredCustomers.map((customer) => (
+                    <tr
+                      key={customer.userId}
+                      onClick={() => handleViewDetails(customer)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <td onClick={() => handleCustomerView(customer.userId)}>
+                        {customer.userId}
+                      </td>
+                      <td onClick={() => handleCustomerView(customer.userId)}>
+                        {customer.fullName}
+                      </td>
+                      <td onClick={() => handleCustomerView(customer.userId)}>
+                        {customer.email}
+                      </td>
+                      <td onClick={() => handleCustomerView(customer.userId)}>
+                        {customer.isApproved ? "Approved" : "Pending"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            )}
 
             {/* Pagination Controls */}
             <div

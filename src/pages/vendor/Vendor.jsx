@@ -198,43 +198,62 @@ const Vendor = () => {
           ></div>
         ) : (
           <>
-            <Table bordered hover>
-              <thead>
-                <tr>
-                  <th>Vendor ID</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Rating</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredVendors.map((vendor) => (
-                  <tr
-                    style={{ cursor: "pointer" }}
-                    key={vendor.userId}
-                    onClick={() => set(vendor)}
-                  >
-                    <td>{vendor.userId}</td>
-                    <td>{vendor.fullName}</td>
-                    <td>{vendor.email}</td>
-                    <td>{vendor.averageRating}</td>
-                    <td>
-                      <Button
-                        variant="warning"
-                        className="me-2"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleEdit(vendor.userId);
-                        }}
-                      >
-                        Edit
-                      </Button>
-                    </td>
+            {" "}
+            {filteredVendors.length == 0 ? (
+              <>
+                <div
+                  style={{
+                    width: "full",
+                    display: "flex",
+                    justifyContent: "center",
+                    textAlign: "center",
+                    height: "100vh",
+                    marginTop: "25vh",
+                    fontSize: "30px",
+                  }}
+                >
+                  No records were found
+                </div>
+              </>
+            ) : (
+              <Table bordered hover>
+                <thead>
+                  <tr>
+                    <th>Vendor ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Rating</th>
+                    <th>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </Table>
+                </thead>
+                <tbody>
+                  {filteredVendors.map((vendor) => (
+                    <tr
+                      style={{ cursor: "pointer" }}
+                      key={vendor.userId}
+                      onClick={() => set(vendor)}
+                    >
+                      <td>{vendor.userId}</td>
+                      <td>{vendor.fullName}</td>
+                      <td>{vendor.email}</td>
+                      <td>{vendor.averageRating}</td>
+                      <td>
+                        <Button
+                          variant="warning"
+                          className="me-2"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEdit(vendor.userId);
+                          }}
+                        >
+                          Edit
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            )}
           </>
         )}
       </div>

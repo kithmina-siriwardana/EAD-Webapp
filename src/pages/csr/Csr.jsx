@@ -199,38 +199,56 @@ const Csr = () => {
           ></div>
         ) : (
           <>
-            <Table bordered hover>
-              <thead>
-                <tr>
-                  <th>CSR ID</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredCsrs.map((csr) => (
-                  <tr
-                    style={{ cursor: "pointer" }}
-                    key={csr.userId}
-                    onClick={() => set(csr)}
-                  >
-                    <td>{csr.userId}</td>
-                    <td>{csr.fullName}</td>
-                    <td>{csr.email}</td>
+            {" "}
+            {filteredCsrs.length == 0 ? (
+              <>
+                <div
+                  style={{
+                    width: "full",
+                    display: "flex",
+                    justifyContent: "center",
+                    textAlign: "center",
+                    height: "100vh",
+                    marginTop: "25vh",
+                    fontSize: "30px",
+                  }}
+                >
+                  No records were found
+                </div>
+              </>
+            ) : (
+              <Table bordered hover>
+                <thead>
+                  <tr>
+                    <th>CSR ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredCsrs.map((csr) => (
+                    <tr
+                      style={{ cursor: "pointer" }}
+                      key={csr.userId}
+                      onClick={() => set(csr)}
+                    >
+                      <td>{csr.userId}</td>
+                      <td>{csr.fullName}</td>
+                      <td>{csr.email}</td>
 
-                    <td>
-                      <Button
-                        variant="warning"
-                        className="me-2"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleEdit(csr.userId);
-                        }}
-                      >
-                        Edit
-                      </Button>
-                      {/* <Button
+                      <td>
+                        <Button
+                          variant="warning"
+                          className="me-2"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEdit(csr.userId);
+                          }}
+                        >
+                          Edit
+                        </Button>
+                        {/* <Button
                         variant="danger"
                         onClick={(e) => {
                           e.stopPropagation();
@@ -239,11 +257,12 @@ const Csr = () => {
                       >
                         Delete
                       </Button> */}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            )}
           </>
         )}
       </div>

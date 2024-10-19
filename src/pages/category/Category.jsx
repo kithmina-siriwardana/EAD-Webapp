@@ -293,48 +293,66 @@ const Category = () => {
           ></div>
         ) : (
           <>
-            <Table
-              bordered
-              hover
-              style={{ backgroundColor: "#edf2fd" }}
-              className="custom-table"
-            >
-              <thead>
-                <tr>
-                  <th>Category ID</th>
-                  <th>Name</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredCategories.map((category) => (
-                  <tr
-                    key={category.categoryId}
-                    onClick={() => handleViewDetails(category)}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <td onClick={() => handleCategoryView(category.userId)}>
-                      {category.categoryId}
-                    </td>
-                    <td onClick={() => handleCategoryView(category.userId)}>
-                      {category.name}
-                    </td>
-                    <td onClick={() => handleCategoryView(category.userId)}>
-                      <Form.Check
-                        type="switch"
-                        id={`custom-switch-${category.categoryId}`}
-                        label={category.status}
-                        checked={category.status === "active"}
-                        onChange={() =>
-                          handleToggleStatus(
-                            category.categoryId,
-                            category.status
-                          )
-                        }
-                      />
-                    </td>
-                    {/* <td onClick={() => handleCategoryView(category.userId)}>
+            {" "}
+            {filteredCategories.length == 0 ? (
+              <>
+                <div
+                  style={{
+                    width: "full",
+                    display: "flex",
+                    justifyContent: "center",
+                    textAlign: "center",
+                    height: "100vh",
+                    marginTop: "25vh",
+                    fontSize: "30px",
+                  }}
+                >
+                  No records were found
+                </div>
+              </>
+            ) : (
+              <Table
+                bordered
+                hover
+                style={{ backgroundColor: "#edf2fd" }}
+                className="custom-table"
+              >
+                <thead>
+                  <tr>
+                    <th>Category ID</th>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredCategories.map((category) => (
+                    <tr
+                      key={category.categoryId}
+                      onClick={() => handleViewDetails(category)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <td onClick={() => handleCategoryView(category.userId)}>
+                        {category.categoryId}
+                      </td>
+                      <td onClick={() => handleCategoryView(category.userId)}>
+                        {category.name}
+                      </td>
+                      <td onClick={() => handleCategoryView(category.userId)}>
+                        <Form.Check
+                          type="switch"
+                          id={`custom-switch-${category.categoryId}`}
+                          label={category.status}
+                          checked={category.status === "active"}
+                          onChange={() =>
+                            handleToggleStatus(
+                              category.categoryId,
+                              category.status
+                            )
+                          }
+                        />
+                      </td>
+                      {/* <td onClick={() => handleCategoryView(category.userId)}>
                       <Form.Check
                         type="switch"
                         id={`custom-switch-${category.categoryId}`}
@@ -344,26 +362,26 @@ const Category = () => {
                       />
                     </td> */}
 
-                    <td>
-                      <Button
-                        variant="warning"
-                        className="me-2"
-                        onClick={() => handleEdit(category.id)}
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        variant="danger"
-                        onClick={() => handleDelete(category.categoryId)}
-                      >
-                        Delete
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-
+                      <td>
+                        <Button
+                          variant="warning"
+                          className="me-2"
+                          onClick={() => handleEdit(category.id)}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          variant="danger"
+                          onClick={() => handleDelete(category.categoryId)}
+                        >
+                          Delete
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            )}
             {/* Pagination Controls */}
             <div
               className="pagination-controls"

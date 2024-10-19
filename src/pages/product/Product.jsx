@@ -333,71 +333,88 @@ const Product = () => {
           ></div>
         ) : (
           <>
-            <Table
-              bordered
-              hover
-              style={{ backgroundColor: "#edf2fd" }}
-              className="custom-table"
-            >
-              <thead>
-                <tr>
-                  <th>Product ID</th>
-                  <th>Product Name</th>
-                  <th>Vendor </th>
-                  <th>Price (Rs.)</th>
-                  <th>Quantity</th>
-                  <th>Category</th>
-                  {/* <th>Status</th> */}
-                  {loggedInUser.role === "Vendor" && <th>Actions</th>}
-                </tr>
-              </thead>
-              <tbody>
-                {currentProducts.map((product) => (
-                  <tr
-                    key={product.id}
-                    onClick={() => console.log(product.id)}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <td onClick={() => handleProductView(product.id)}>
-                      {product.productId}
-                    </td>
-                    <td onClick={() => handleProductView(product.id)}>
-                      {product.name}
-                    </td>
-                    <td onClick={() => handleProductView(product.id)}>
-                      {product.vendorName}
-                    </td>
-                    <td onClick={() => handleProductView(product.id)}>
-                      {product.price}
-                    </td>
-                    <td onClick={() => handleProductView(product.id)}>
-                      {product.quantity}
-                    </td>
-                    <td onClick={() => handleProductView(product.id)}>
-                      {product.categoryName}
-                    </td>
-                    {loggedInUser.role === "Vendor" && (
-                      <td>
-                        <Button
-                          variant="warning"
-                          className="me-2"
-                          onClick={() => handleEdit(product.productId)}
-                        >
-                          Edit
-                        </Button>
-                        <Button
-                          variant="danger"
-                          onClick={() => handleDelete(product.productId)}
-                        >
-                          Delete
-                        </Button>
-                      </td>
-                    )}
+            {currentProducts.length == 0 ? (
+              <>
+                <div
+                  style={{
+                    width: "full",
+                    display: "flex",
+                    justifyContent: "center",
+                    textAlign: "center",
+                    height: "100vh",
+                    marginTop: "25vh",
+                    fontSize: "30px",
+                  }}
+                >
+                  No records were found
+                </div>
+              </>
+            ) : (
+              <Table
+                bordered
+                hover
+                style={{ backgroundColor: "#edf2fd" }}
+                className="custom-table"
+              >
+                <thead>
+                  <tr>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Vendor </th>
+                    <th>Price (Rs.)</th>
+                    <th>Quantity</th>
+                    <th>Category</th>
+                    {/* <th>Status</th> */}
+                    {loggedInUser.role === "Vendor" && <th>Actions</th>}
                   </tr>
-                ))}
-              </tbody>
-            </Table>
-
+                </thead>
+                <tbody>
+                  {currentProducts.map((product) => (
+                    <tr
+                      key={product.id}
+                      onClick={() => console.log(product.id)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <td onClick={() => handleProductView(product.id)}>
+                        {product.productId}
+                      </td>
+                      <td onClick={() => handleProductView(product.id)}>
+                        {product.name}
+                      </td>
+                      <td onClick={() => handleProductView(product.id)}>
+                        {product.vendorName}
+                      </td>
+                      <td onClick={() => handleProductView(product.id)}>
+                        {product.price}
+                      </td>
+                      <td onClick={() => handleProductView(product.id)}>
+                        {product.quantity}
+                      </td>
+                      <td onClick={() => handleProductView(product.id)}>
+                        {product.categoryName}
+                      </td>
+                      {loggedInUser.role === "Vendor" && (
+                        <td>
+                          <Button
+                            variant="warning"
+                            className="me-2"
+                            onClick={() => handleEdit(product.productId)}
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            variant="danger"
+                            onClick={() => handleDelete(product.productId)}
+                          >
+                            Delete
+                          </Button>
+                        </td>
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            )}
             {/* Pagination Controls */}
             <div
               className="pagination-controls"
